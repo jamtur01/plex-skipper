@@ -6,9 +6,9 @@ name: Deploy
 
 on:
   push:
-    branches: ["main"]
+    branches: ["skipper"]
   pull_request:
-    branches: ["main"]
+    branches: ["skipper"]
 
 jobs:
   Version:

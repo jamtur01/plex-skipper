@@ -3,6 +3,7 @@ import {
   enablePlexSkipper,
   enableSkipIntro,
   enableSkipCredits,
+  enableAutoSkip,
   delaySkipCredits,
   delaySkipIntro,
 } from "@/utils/storage";
@@ -31,6 +32,7 @@ export default defineContentScript({
         if (record.addedNodes.length) {
           tryClickingSkipButton();
           tryClickingNextButton();
+          setupPlayerControls();
           break;
         }
       }
@@ -102,6 +104,47 @@ const tryClickingNextButton = async (): Promise<void> => {
       nextButton.click();
     }
   }
+};
+
+/**
+ * Setup event listeners for player controls
+ */
+const setupPlayerControls = async (): Promise<void> => {
+  const autoSkipEnabled = await enableAutoSkip.getValue();
+  if (!autoSkipEnabled) return;
+
+  const forwardButton = document.querySelector(
+    "[data-testid='skipForwardButton']",
+  ) as HTMLButtonElement;
+  
+  if (!forwardButton) return;
+
+  // Remove any existing listener to prevent duplicates
+  forwardButton.removeEventListener('click', handleForwardClick);
+  // Add the click listener
+  forwardButton.addEventListener('click', handleForwardClick);
+};
+
+/**
+ * Handle forward button click
+ */
+const handleForwardClick = (event: MouseEvent): void => {
+  // Prevent immediate execution to allow the original forward skip to complete
+  setTimeout(() => {
+    const backwardButton = document.querySelector(
+      "[data-testid='skipBackButton']",
+    ) as HTMLButtonElement;
+
+    if (!backwardButton) return;
+
+    // Backward 20 seconds (two 10-second clicks since the back button is set for 10s)
+    for (let i = 0; i < 2; i++) {
+      setTimeout(() => {
+        simulateClick(backwardButton);
+      }, i * 100); // Small delay between back clicks to ensure they register
+    }
+  }, 500); // Wait for the forward skip to complete
+};
 };
 
 /**

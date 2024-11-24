@@ -1,22 +1,20 @@
-const enablePlexSkipper = storage.defineItem<boolean>(
-  "local:enablePlexSkipper",
-  {
-    defaultValue: true,
-  },
-);
+const enablePlexSkipper = storage.defineItem<boolean>("local:enablePlexSkipper", {
+  defaultValue: true,
+});
 
 const enableSkipIntro = storage.defineItem<boolean>("local:enableSkipIntro", {
   defaultValue: true,
 });
 
-const enableSkipCredits = storage.defineItem<boolean>(
-  "local:enableSkipCredit",
-  {
-    defaultValue: true,
-  },
-);
+const enableSkipCredits = storage.defineItem<boolean>("local:enableSkipCredit", {
+  defaultValue: true,
+});
 
 const enablePlayNext = storage.defineItem<boolean>("local:enablePlayNext", {
+  defaultValue: true,
+});
+
+const enableAutoSkip = storage.defineItem<boolean>("local:enableAutoSkip", {
   defaultValue: true,
 });
 
@@ -33,6 +31,7 @@ export {
   enableSkipIntro,
   enableSkipCredits,
   enablePlayNext,
+  enableAutoSkip,
   delaySkipCredits,
   delaySkipIntro,
 };
